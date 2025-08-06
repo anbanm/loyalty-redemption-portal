@@ -1,8 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
-import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,80 +14,62 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "product")
-@AdminPresentationClass(friendlyName = "Product")
 public class Product {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @NotBlank(message = "SKU is required")
     @Size(max = 100, message = "SKU cannot exceed 100 characters")
     @Column(name = "sku", unique = true, nullable = false)
-    @AdminPresentation(friendlyName = "SKU", order = 1, prominent = true)
     private String sku;
 
     @NotBlank(message = "Product name is required")
     @Size(max = 255, message = "Product name cannot exceed 255 characters")
     @Column(name = "name", nullable = false)
-    @AdminPresentation(friendlyName = "Product Name", order = 2, prominent = true)
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    @AdminPresentation(friendlyName = "Description", order = 3, fieldType = SupportedFieldType.HTML)
     private String description;
 
     @NotNull(message = "Product type is required")
     @Enumerated(EnumType.STRING)
     @Column(name = "product_type", nullable = false)
-    @AdminPresentation(friendlyName = "Product Type", order = 4, prominent = true, 
-                      fieldType = SupportedFieldType.BROADLEAF_ENUMERATION,
-                      broadleafEnumeration = "com.loyaltyportal.entity.ProductType")
     private ProductType productType;
 
     @NotNull(message = "Points cost is required")
     @Min(value = 1, message = "Points cost must be at least 1")
     @Column(name = "points_cost", nullable = false)
-    @AdminPresentation(friendlyName = "Points Cost", order = 5, prominent = true)
     private Integer pointsCost;
 
     @Column(name = "retail_price", precision = 10, scale = 2)
-    @AdminPresentation(friendlyName = "Retail Price", order = 6)
     private BigDecimal retailPrice;
 
     @Column(name = "image_url", length = 500)
-    @AdminPresentation(friendlyName = "Image URL", order = 7)
     private String imageUrl;
 
     @Column(name = "category", length = 100)
-    @AdminPresentation(friendlyName = "Category", order = 8)
     private String category;
 
     @Column(name = "brand", length = 100)
-    @AdminPresentation(friendlyName = "Brand", order = 9)
     private String brand;
 
     @Column(name = "weight_kg", precision = 8, scale = 3)
-    @AdminPresentation(friendlyName = "Weight (kg)", order = 10)
     private BigDecimal weightKg;
 
     @Column(name = "dimensions")
-    @AdminPresentation(friendlyName = "Dimensions", order = 11)
     private String dimensions;
 
     @Column(name = "is_active")
-    @AdminPresentation(friendlyName = "Active", order = 12)
     private Boolean isActive = true;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 13)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @AdminPresentation(friendlyName = "Updated At", order = 14)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

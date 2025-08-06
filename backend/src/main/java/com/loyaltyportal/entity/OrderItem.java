@@ -1,7 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,59 +10,48 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "order_item")
-@AdminPresentationClass(friendlyName = "Order Item")
 public class OrderItem {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @NotNull(message = "Order is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    @AdminPresentation(friendlyName = "Order", order = 1, prominent = true)
     private RedemptionOrder order;
 
     @NotNull(message = "Product is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    @AdminPresentation(friendlyName = "Product", order = 2, prominent = true)
     private Product product;
 
     @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be at least 1")
     @Column(name = "quantity", nullable = false)
-    @AdminPresentation(friendlyName = "Quantity", order = 3, prominent = true)
     private Integer quantity;
 
     @NotNull(message = "Points per item is required")
     @Min(value = 1, message = "Points per item must be at least 1")
     @Column(name = "points_per_item", nullable = false)
-    @AdminPresentation(friendlyName = "Points Per Item", order = 4, prominent = true)
     private Integer pointsPerItem;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "fulfillment_status", length = 50)
-    @AdminPresentation(friendlyName = "Fulfillment Status", order = 5)
     private FulfillmentStatus fulfillmentStatus = FulfillmentStatus.PENDING;
 
     @Column(name = "fulfillment_reference")
-    @AdminPresentation(friendlyName = "Fulfillment Reference", order = 6)
     private String fulfillmentReference;
 
     @Column(name = "tracking_number")
-    @AdminPresentation(friendlyName = "Tracking Number", order = 7)
     private String trackingNumber;
 
     @Column(name = "delivered_at")
-    @AdminPresentation(friendlyName = "Delivered At", order = 8)
     private LocalDateTime deliveredAt;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 9)
     private LocalDateTime createdAt;
 
     @PrePersist

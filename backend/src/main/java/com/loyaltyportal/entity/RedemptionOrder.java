@@ -1,7 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,66 +12,53 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "redemption_order")
-@AdminPresentationClass(friendlyName = "Redemption Order")
 public class RedemptionOrder {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @Size(max = 50, message = "Order number cannot exceed 50 characters")
     @Column(name = "order_number", unique = true, length = 50)
-    @AdminPresentation(friendlyName = "Order Number", order = 1, prominent = true)
     private String orderNumber;
 
     @NotNull(message = "Company is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    @AdminPresentation(friendlyName = "Company", order = 2, prominent = true)
     private Company company;
 
     @NotNull(message = "Account manager is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_manager_id", nullable = false)
-    @AdminPresentation(friendlyName = "Account Manager", order = 3, prominent = true)
     private AccountManager accountManager;
 
     @NotNull(message = "Total points is required")
     @Min(value = 1, message = "Total points must be at least 1")
     @Column(name = "total_points", nullable = false)
-    @AdminPresentation(friendlyName = "Total Points", order = 4, prominent = true)
     private Integer totalPoints;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    @AdminPresentation(friendlyName = "Status", order = 5, prominent = true)
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "shipping_address", columnDefinition = "TEXT")
-    @AdminPresentation(friendlyName = "Shipping Address", order = 6)
     private String shippingAddress;
 
     @Column(name = "special_instructions", columnDefinition = "TEXT")
-    @AdminPresentation(friendlyName = "Special Instructions", order = 7)
     private String specialInstructions;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 8)
     private LocalDateTime createdAt;
 
     @Column(name = "completed_at")
-    @AdminPresentation(friendlyName = "Completed At", order = 9)
     private LocalDateTime completedAt;
 
     @Column(name = "cancelled_at")
-    @AdminPresentation(friendlyName = "Cancelled At", order = 10)
     private LocalDateTime cancelledAt;
 
     @Column(name = "cancellation_reason")
-    @AdminPresentation(friendlyName = "Cancellation Reason", order = 11)
     private String cancellationReason;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

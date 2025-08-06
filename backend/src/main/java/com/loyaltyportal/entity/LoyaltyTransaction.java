@@ -1,7 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,62 +9,50 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "loyalty_transaction")
-@AdminPresentationClass(friendlyName = "Loyalty Transaction")
 public class LoyaltyTransaction {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @NotNull(message = "Order is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    @AdminPresentation(friendlyName = "Order", order = 1, prominent = true)
     private RedemptionOrder order;
 
     @NotNull(message = "Company is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    @AdminPresentation(friendlyName = "Company", order = 2, prominent = true)
     private Company company;
 
     @NotNull(message = "Points amount is required")
     @Column(name = "points_amount", nullable = false)
-    @AdminPresentation(friendlyName = "Points Amount", order = 3, prominent = true)
     private Integer pointsAmount;
 
     @NotNull(message = "Transaction type is required")
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false)
-    @AdminPresentation(friendlyName = "Transaction Type", order = 4, prominent = true)
     private TransactionType transactionType;
 
     @Column(name = "external_transaction_id", length = 100)
-    @AdminPresentation(friendlyName = "External Transaction ID", order = 5)
     private String externalTransactionId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    @AdminPresentation(friendlyName = "Status", order = 6, prominent = true)
     private TransactionStatus status = TransactionStatus.PENDING;
 
     @Column(name = "error_message", columnDefinition = "TEXT")
-    @AdminPresentation(friendlyName = "Error Message", order = 7)
     private String errorMessage;
 
     @Column(name = "retry_count")
-    @AdminPresentation(friendlyName = "Retry Count", order = 8)
     private Integer retryCount = 0;
 
     @Column(name = "processed_at")
-    @AdminPresentation(friendlyName = "Processed At", order = 9)
     private LocalDateTime processedAt;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 10)
     private LocalDateTime createdAt;
 
     @PrePersist

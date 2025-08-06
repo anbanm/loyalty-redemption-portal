@@ -1,6 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.BroadleafEnumerationType;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;

@@ -21,26 +21,14 @@
     </parent>
 
     <properties>
-        <java.version>11</java.version>
-        <broadleaf.version>6.2.12-GA</broadleaf.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Broadleaf Commerce -->
-        <dependency>
-            <groupId>org.broadleafcommerce</groupId>
-            <artifactId>broadleaf-framework-web</artifactId>
-            <version>${broadleaf.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.broadleafcommerce</groupId>
-            <artifactId>broadleaf-admin-module</artifactId>
-            <version>${broadleaf.version}</version>
-        </dependency>
+        <!-- Core Spring Boot web dependencies -->
 
         <!-- Spring Boot Starters -->
         <dependency>
@@ -73,7 +61,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- JSON Processing -->
@@ -132,8 +120,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

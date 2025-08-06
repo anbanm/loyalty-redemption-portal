@@ -1,7 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,40 +11,32 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "company")
-@AdminPresentationClass(friendlyName = "Company")
 public class Company {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @NotBlank(message = "Company name is required")
     @Size(max = 255, message = "Company name cannot exceed 255 characters")
     @Column(name = "name", nullable = false)
-    @AdminPresentation(friendlyName = "Company Name", order = 1, prominent = true)
     private String name;
 
     @Column(name = "loyalty_account_id", unique = true, length = 100)
-    @AdminPresentation(friendlyName = "Loyalty Account ID", order = 2)
     private String loyaltyAccountId;
 
     @Column(name = "tier_level", length = 50)
-    @AdminPresentation(friendlyName = "Tier Level", order = 3)
     private String tierLevel;
 
     @Column(name = "is_active")
-    @AdminPresentation(friendlyName = "Active", order = 4)
     private Boolean isActive = true;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 5)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @AdminPresentation(friendlyName = "Updated At", order = 6)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

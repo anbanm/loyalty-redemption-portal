@@ -1,7 +1,5 @@
 package com.loyaltyportal.entity;
 
-import org.broadleafcommerce.common.presentation.AdminPresentation;
-import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,53 +13,43 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "account_manager")
-@AdminPresentationClass(friendlyName = "Account Manager")
 public class AccountManager {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    @AdminPresentation(friendlyName = "ID", visibility = AdminPresentation.VisibilityEnum.HIDDEN_ALL)
     private UUID id;
 
     @NotNull(message = "Company is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    @AdminPresentation(friendlyName = "Company", order = 1, prominent = true)
     private Company company;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     @Size(max = 255, message = "Email cannot exceed 255 characters")
     @Column(name = "email", unique = true, nullable = false)
-    @AdminPresentation(friendlyName = "Email", order = 2, prominent = true)
     private String email;
 
     @NotBlank(message = "Name is required")
     @Size(max = 255, message = "Name cannot exceed 255 characters")
     @Column(name = "name", nullable = false)
-    @AdminPresentation(friendlyName = "Name", order = 3, prominent = true)
     private String name;
 
     @Column(name = "role", length = 50)
-    @AdminPresentation(friendlyName = "Role", order = 4)
     private String role = "ACCOUNT_MANAGER";
 
     @Column(name = "is_active")
-    @AdminPresentation(friendlyName = "Active", order = 5)
     private Boolean isActive = true;
 
     @Column(name = "last_login")
-    @AdminPresentation(friendlyName = "Last Login", order = 6)
     private LocalDateTime lastLogin;
 
     @Column(name = "created_at")
-    @AdminPresentation(friendlyName = "Created At", order = 7)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @AdminPresentation(friendlyName = "Updated At", order = 8)
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "accountManager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
