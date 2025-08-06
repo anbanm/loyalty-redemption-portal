@@ -1,0 +1,75 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  # Test database configuration
+  datasource:
+    url: jdbc:h2:mem:loyalty_portal_test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # Disable Liquibase for tests
+  liquibase:
+    enabled: false
+
+  # Mail configuration for tests
+  mail:
+    host: localhost
+    port: 25
+    test-connection: false
+
+# Test-specific configuration
+loyalty:
+  mock:
+    enabled: true
+  
+  api:
+    mock:
+      enabled: true
+    base-url: http://test-loyalty-api
+    api-key: test-api-key
+    timeout: 2s
+    retry:
+      max-attempts: 2
+      backoff-delay: 500ms
+  
+  fulfillment:
+    virtual:
+      mock:
+        enabled: true
+      api-url: http://test-virtual-fulfillment
+    
+  notification:
+    mock:
+      enabled: true
+    email:
+      enabled: false
+      from: test@loyalty-portal.com
+
+# Minimal logging for tests
+logging:
+  level:
+    com.loyaltyportal: WARN
+    org.springframework: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type: WARN
+
+# Disable most actuator endpoints in tests
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

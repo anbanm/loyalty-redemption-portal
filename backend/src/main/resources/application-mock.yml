@@ -1,0 +1,85 @@
+spring:
+  config:
+    activate:
+      on-profile: mock
+
+  # Use H2 in-memory database for testing
+  datasource:
+    url: jdbc:h2:mem:loyalty_portal_test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  # Disable Liquibase for mock profile
+  liquibase:
+    enabled: false
+
+# Enable all mock services
+loyalty:
+  mock:
+    enabled: true
+  
+  api:
+    mock:
+      enabled: true
+    base-url: http://mock-loyalty-api
+    api-key: mock-api-key
+    timeout: 5s
+    retry:
+      max-attempts: 3
+      backoff-delay: 1s
+  
+  fulfillment:
+    virtual:
+      mock:
+        enabled: true
+      api-url: http://mock-virtual-fulfillment
+      webhook-url: http://localhost:8080/api/webhooks/fulfillment
+    
+  notification:
+    mock:
+      enabled: true
+    email:
+      enabled: false  # Disable real email sending
+      from: noreply@loyalty-portal-mock.com
+      smtp:
+        host: mock-smtp
+        port: 587
+
+# Logging configuration for mock services
+logging:
+  level:
+    com.loyaltyportal.service.mock: DEBUG
+    com.loyaltyportal.controller.MockController: DEBUG
+    com.loyaltyportal: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+
+# Actuator endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,beans,env
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
