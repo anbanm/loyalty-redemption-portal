@@ -1,0 +1,145 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: loyalty-redemption-portal
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loyalty_portal
+    username: ${DB_USERNAME:loyalty_user}
+    password: ${DB_PASSWORD:loyalty_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8080/auth/realms/loyalty-portal}
+
+logging:
+  level:
+    com.loyaltyportal: DEBUG
+    org.broadleafcommerce: INFO
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
+
+# Broadleaf Configuration
+broadleaf:
+  site:
+    database:
+      initialize: false
+  admin:
+    base-url: /admin
+  
+# Custom Application Configuration
+loyalty:
+  api:
+    base-url: ${LOYALTY_API_URL:https://api.loyalty-provider.com}
+    api-key: ${LOYALTY_API_KEY:your-api-key}
+    timeout: 30s
+    retry:
+      max-attempts: 3
+      backoff-delay: 1s
+  
+  fulfillment:
+    virtual:
+      api-url: ${VIRTUAL_FULFILLMENT_URL:https://api.virtual-fulfillment.com}
+      webhook-url: ${WEBHOOK_BASE_URL:http://localhost:8080}/api/webhooks/fulfillment
+    
+  notification:
+    email:
+      enabled: true
+      from: ${EMAIL_FROM:noreply@loyalty-portal.com}
+      smtp:
+        host: ${SMTP_HOST:localhost}
+        port: ${SMTP_PORT:587}
+        username: ${SMTP_USERNAME:}
+        password: ${SMTP_PASSWORD:}
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+logging:
+  level:
+    com.loyaltyportal: DEBUG
+    org.springframework.security: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+  security:
+    require-ssl: true
+
+logging:
+  level:
+    com.loyaltyportal: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
